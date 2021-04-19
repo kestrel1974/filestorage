@@ -1,6 +1,6 @@
 diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c
 --- a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c	2021-04-13 15:58:26.750900129 +0200
-+++ b/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c	2021-04-19 14:21:51.126343966 +0200
++++ b/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c	2021-04-19 14:47:21.220903249 +0200
 @@ -38,7 +38,6 @@
   \brief IFX AES driver Functions 
  */
@@ -124,13 +124,11 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
      else {
          printk (KERN_ERR "[%s %s %d]: Invalid key_len : %d\n", __FILE__, __func__, __LINE__, key_len);
-@@ -214,36 +243,36 @@
-        ENcryption is used). Key Valid (KV) bit is then only
+@@ -215,35 +244,34 @@
         checked in decryption routine! */
      aes->controlr.PNK = 1;
--
-+    aes->controlr.SM = 1;
  
+-
      aes->controlr.E_D = !encdec;    //encryption
      aes->controlr.O = mode; //0 ECB 1 CBC 2 OFB 3 CFB 4 CTR 
  
@@ -174,7 +172,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  
          i++;
          byte_cnt -= 16;
-@@ -251,18 +280,18 @@
+@@ -251,18 +279,18 @@
  
      /* To handle all non-aligned bytes (not aligned to 16B size) */
      if (byte_cnt) {
@@ -201,7 +199,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  
          /* to ensure that the extended pages are clean */
          memset (out_arg + (i * 16) + (nbytes % AES_BLOCK_SIZE), 0,
-@@ -272,10 +301,10 @@
+@@ -272,10 +300,10 @@
  
      //tc.chen : copy iv_arg back
      if (mode > 0) {
@@ -216,7 +214,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      CRTCL_SECT_END;
-@@ -294,7 +323,6 @@
+@@ -294,7 +322,6 @@
  int ctr_rfc3686_aes_set_key (struct crypto_tfm *tfm, const uint8_t *in_key, unsigned int key_len)
  {
      struct aes_ctx *ctx = crypto_tfm_ctx(tfm);
@@ -224,7 +222,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  
      //printk("ctr_rfc3686_aes_set_key in %s\n", __FILE__);
  
-@@ -304,7 +332,6 @@
+@@ -304,7 +331,6 @@
      key_len -= CTR_RFC3686_NONCE_SIZE; // remove 4 bytes of nonce
  
      if (key_len != 16 && key_len != 24 && key_len != 32) {
@@ -232,7 +230,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
          return -EINVAL;
      }
  
-@@ -315,6 +342,22 @@
+@@ -315,6 +341,22 @@
      return 0;
  }
  
@@ -255,7 +253,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  /*! \fn void ifx_deu_aes (void *ctx_arg, u8 *out_arg, const u8 *in_arg, u8 *iv_arg, u32 nbytes, int encdec, int mode)
   *  \ingroup IFX_AES_FUNCTIONS
   *  \brief main interface with deu hardware in DMA mode
-@@ -456,11 +499,12 @@
+@@ -456,11 +498,12 @@
      .cra_name       =   "aes",
      .cra_driver_name    =   "ifxdeu-aes",
      .cra_priority   =   300,
@@ -269,7 +267,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      .cra_u          =   {
          .cipher = {
              .cia_min_keysize    =   AES_MIN_KEY_SIZE,
-@@ -481,24 +525,20 @@
+@@ -481,24 +524,20 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -301,7 +299,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -513,24 +553,20 @@
+@@ -513,24 +552,20 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -334,7 +332,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -539,25 +575,21 @@
+@@ -539,25 +574,21 @@
  /* 
   * \brief AES function mappings
  */
@@ -375,7 +373,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  };
  
  
-@@ -570,25 +602,21 @@
+@@ -570,25 +601,21 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -409,7 +407,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -603,25 +631,21 @@
+@@ -603,25 +630,21 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -443,7 +441,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -630,26 +654,22 @@
+@@ -630,26 +653,22 @@
  /*
   * \brief AES function mappings
  */
@@ -486,7 +484,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  };
  
  
-@@ -662,25 +682,21 @@
+@@ -662,25 +681,21 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -520,7 +518,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -695,25 +711,21 @@
+@@ -695,25 +710,21 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -554,7 +552,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -722,26 +734,22 @@
+@@ -722,26 +733,22 @@
  /* 
   * \brief AES function mappings
  */
@@ -597,7 +595,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  };
  
  
-@@ -754,17 +762,17 @@
+@@ -754,17 +761,17 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -625,7 +623,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      
      /* set up counter block */
      memcpy(rfc3686_iv, ctx->nonce, CTR_RFC3686_NONCE_SIZE); 
-@@ -779,7 +787,7 @@
+@@ -779,7 +786,7 @@
  	ifx_deu_aes_ctr(ctx, walk.dst.virt.addr, walk.src.virt.addr,
  			rfc3686_iv, nbytes, CRYPTO_DIR_ENCRYPT, 0);
  	nbytes -= walk.nbytes;
@@ -634,7 +632,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  	return err;
      }
  
-@@ -789,14 +797,14 @@
+@@ -789,14 +796,14 @@
  
  	nbytes -= walk.nbytes;
  	bsize -= walk.nbytes;
@@ -651,7 +649,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
     
      return err;
-@@ -811,17 +819,17 @@
+@@ -811,17 +818,17 @@
   *  \param nbytes data size in bytes  
   *  \return err
  */                                 
@@ -679,7 +677,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  
      /* set up counter block */
      memcpy(rfc3686_iv, ctx->nonce, CTR_RFC3686_NONCE_SIZE); 
-@@ -836,7 +844,7 @@
+@@ -836,7 +843,7 @@
  	ifx_deu_aes_ctr(ctx, walk.dst.virt.addr, walk.src.virt.addr,
  			rfc3686_iv, nbytes, CRYPTO_DIR_ENCRYPT, 0);
  	nbytes -= walk.nbytes;
@@ -688,7 +686,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  	return err;
      }
  
-@@ -846,14 +854,14 @@
+@@ -846,14 +853,14 @@
  
  	nbytes -= walk.nbytes;
  	bsize -= walk.nbytes;
@@ -705,7 +703,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      }
  
      return err;
-@@ -862,26 +870,22 @@
+@@ -862,26 +869,22 @@
  /* 
   * \brief AES function mappings
  */
@@ -748,7 +746,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
  };
  
  
-@@ -898,16 +902,16 @@
+@@ -898,16 +901,16 @@
      if ((ret = crypto_register_alg(&ifxdeu_aes_alg)))
          goto aes_err;
  
@@ -769,7 +767,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
          goto ctr_rfc3686_aes_err;
  
      aes_chip_init ();
-@@ -919,19 +923,19 @@
+@@ -919,19 +922,19 @@
      return ret;
  
  ctr_rfc3686_aes_err:
@@ -793,7 +791,7 @@ diff -ruN a/package/kernel/lantiq/ltq-deu/src/ifxmips_aes.c b/package/kernel/lan
      printk (KERN_ERR "IFX aes initialization failed!\n");
      return ret;
  aes_err:
-@@ -947,10 +951,10 @@
+@@ -947,10 +950,10 @@
  void ifxdeu_fini_aes (void)
  {
      crypto_unregister_alg (&ifxdeu_aes_alg);
