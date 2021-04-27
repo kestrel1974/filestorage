@@ -101,6 +101,26 @@
 };
 
 &gswip_mdio {
+	phy0: ethernet-phy@0 {
+		reg = <0x00>;
+	};
+
+	phy1: ethernet-phy@1 {
+		reg = <0x01>;
+	};
+
+	phy2: ethernet-phy@2 {
+		reg = <0x02>;
+	};
+
+	phy3: ethernet-phy@3 {
+		reg = <0x03>;
+	};
+
+	phy4: ethernet-phy@4 {
+		reg = <0x04>;
+	};
+
 	phy5: ethernet-phy@5 {
 		reg = <0x05>;
 	};
