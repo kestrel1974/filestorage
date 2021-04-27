@@ -1,0 +1,20 @@
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -571,6 +571,7 @@
+ 			struct phy_device *phydev;
+ 
+ 			phydev = mdiobus_scan(bus, i);
++			printk(KERN_INFO "mdiobus_scan nr: %d id: %x\n", i, phydev);
+ 			if (IS_ERR(phydev) && (PTR_ERR(phydev) != -ENODEV)) {
+ 				err = PTR_ERR(phydev);
+ 				goto error;
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -850,6 +850,7 @@
+ 	else
+ 		r = get_phy_c22_id(bus, addr, &phy_id);
+ 
++	printk(KERN_INFO "phy_device: addr: %x phy_id: %x\n", addr, phy_id);
+ 	if (r)
+ 		return ERR_PTR(r);
+ 
